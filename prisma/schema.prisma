@@ -11,7 +11,14 @@ datasource db {
 }
 
 model TodoItem {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  title  String
-  done   Boolean @default(false)
+  id    String  @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  done  Boolean @default(false)
+}
+
+model Guest {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  present  Boolean @default(false)
+  ageGroup Int     @default(3)
 }
