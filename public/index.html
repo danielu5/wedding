@@ -69,15 +69,23 @@
             <div class="card">
               <div class="card-body p-5">
 
-                <form class="d-flex justify-content-center align-items-center mb-4" id="todo-form">
+              <form class="d-flex justify-content-center align-items-center mb-4" id="guest-form">
                   <div class="form-outline flex-fill">
                     <input type="text" id="add-input" class="form-control" />
-                    <label class="form-label" for="add-input">New task...</label>
+                  <label class="form-label" for="add-input">Nowy gość...</label>
                   </div>
-                  <button type="submit" class="btn btn-info ms-2">Add</button>
+                <button type="submit" class="btn btn-info ms-2">Dodaj</button>
+              </form>
+              <form class="d-flex justify-content-left align-items-center mb-4" id="guest-form">
+                <input class="form-check-input m-2" type="radio" id="age1" name="age" value="30">
+                <label for="age1">0-5</label><br>
+                <input class="form-check-input m-2" type="radio" id="age2" name="age" value="60">
+                <label for="age2">5-10</label><br>
+                <input class="form-check-input m-2" type="radio" id="age3" name="age" value="100" checked>
+                <label for="age3">>11</label>
                 </form>
 
-                <ul class="list-group mb-0" id="todo-list" />
+              <ul class="list-group mb-0" id="guest-list" />
 
               </div>
             </div>
