@@ -21,33 +21,33 @@ const apiFetch = async (url, method, body) => {
 const renderOptions = ({ id, name, ageGroup }) => {
     const idSuffix = id == null ? '' : ('-' + id);
     return `
+        <p>Wiek</p>
         <form class="d-flex justify-content-left align-items-center">
             <input class="form-check-input mx-2" type="radio" id="age1${idSuffix}" name="age" value="30" ${ageGroup == 1 ? 'checked' : ''}>
-            <label for="age1">0-5</label><br>
+            <label class="options-label" for="age1">0-5 lat</label><br>
             <input class="form-check-input mx-2" type="radio" id="age2${idSuffix}" name="age" value="60" ${ageGroup == 2 ? 'checked' : ''}>
-            <label for="age2">5-10</label><br>
+            <label class="options-label" for="age2">5-10 lat</label><br>
             <input class="form-check-input mx-2" type="radio" id="age3${idSuffix}" name="age" value="100" ${ageGroup == 3 ? 'checked' : ''}>
-            <label for="age3">>10</label>
+            <label class="options-label" for="age3">>10 lat</label>
         </form>
         `;
 };
 
 const initGuests = () => {
 
-    const handleGuestDelete = (ev, id) => {
+    const handleGuestDelete = (ev, id, name) => {
         ev.preventDefault();
         const doDelete = async () => {
             await apiFetch(`/guests/${id}`, "DELETE");
             refreshList();
         }
-        doDelete().catch(err => console.log("Error deleting guest", err));
+        if (confirm(`Na pewno chesz usunąć gościa ${name}?`) == true)
+            doDelete().catch(err => console.log("Error deleting guest", err));
     };
     window.handleGuestDelete = handleGuestDelete;
 
-    const renderName = ({ name, present }) => {
-        if (!present) return name;
-        return `<b>${name}</b>`;
-    };
+    const showSubGuests = () => true;// document.getElementById('checkbox-subguests').checked;
+
     const renderAgeGroup = (ageGroup) => {
         switch (ageGroup) {
             case 1: {
@@ -66,11 +66,11 @@ const initGuests = () => {
     };
 
     const renderSelectorItem = ({ id, name }) => {
-        return `<option value="${id}">${name}</option>`;
+        return `<option value="${id}" style="padding: .375rem .75rem;">${name}</option>`;
     };
 
     const renderSubGuests = ({ id, SubGuests }) => {
-        if (SubGuests == null || SubGuests.length === 0) {
+        if (showSubGuests() == false || SubGuests == null || SubGuests.length === 0) {
             return '';
         } else {
             return SubGuests.map((guest) => renderSubItem(id, guest.id, guest.name, guest.present, guest.ageGroup, guest.SubGuests)).join("");
@@ -78,10 +78,10 @@ const initGuests = () => {
     };
 
     const renderSubItem = (ownerId, id, name, present, ageGroup, SubGuests) => `
-        <div class="rounded my-1" style="background-color: ${present ? '#e0f0e3' : '#f4f6f7'};">
+        <div class="rounded mt-1" style="background-color: ${present ? '#e8f4ea' : '#faf7f4'};">
             <div class=" rounded list-group-item d-flex align-items-center border-0" style="background-color: transparent;">
                 <div style="flex-grow: 1;">
-                    ${renderName({ name, present })}
+                    ${name}
                     (${renderAgeGroup(ageGroup)})
                 </div>
                 <input
@@ -92,7 +92,7 @@ const initGuests = () => {
                     onchange="handleGuestPresentChange(event, '${id}')"
                 />
                 <a
-                    style="color: #C46316; margin: 0 0 0 10px""
+                    style="color: ${mainColor(present)}; margin: 0 0 0 10px""
                     href="#"
                     role="button"
                     onclick="handleSubGuestDeleteChange(event, '${ownerId}', '${id}')"
@@ -101,14 +101,14 @@ const initGuests = () => {
                 </a>
                  <a
                     id="edit-a-${id}"
-                    style="color: #C46316; margin: 0 0 0 10px"
+                    style="color: ${mainColor(present)}; margin: 0 0 0 10px"
                     role="button"
                     onclick="handleGuestEditChange('${id}')"
                     >
                     <i class="far fa-lg fa-edit"></i>
                 </a>
             </div>
-            <div class="rounded" style="display: none; padding: 0.5rem 1.5rem; background-color: transparent;" id="edit-div-${id}">
+            <div class="rounded" style="display: none; padding: 0.5rem .75rem; background-color: transparent;" id="edit-div-${id}">
                 <form class="d-flex justify-content-center align-items-center" onsubmit="handleGuestChange(event, '${id}')">
                     <input type="text" id="add-input-${id}" class="form-control" value="${name}" />
                     <button type="submit" class="btn btn-info ms-2">Zapisz</button>
@@ -119,12 +119,23 @@ const initGuests = () => {
         </div>
     `;
 
+    const mainColor = (present) => "var(--brown-main)";// present ? "var(--green-main)" : "var(--brown-main)";
+
+    const getName = (name, SubGuests) => {
+        if (showSubGuests() == true || SubGuests.length == 0) {
+            return name;
+        }
+        else {
+            return name + ', ' + SubGuests.map(guest => guest.name).join(", ");
+        }
+    }
+
     const renderItem = ({ id, name, present, ageGroup, SubGuests }) => `
-        <div class="my-2" >
-            <div class="rounded" style="background-color: ${present ? '#b8d8be' : '#fdf5ee'};">
+        <div class="my-3 rounded p-0" >
+            <div class="rounded" style="background-color: ${present ? '#d2e7d6' : '#fdf5ee'};">
                 <div class="rounded list-group-item d-flex align-items-center border-0" style="background-color: transparent;">
                     <div style="flex-grow: 1;">
-                        ${renderName({ name, present })}
+                        <b>${getName(name, SubGuests)}</b>
                         (${renderAgeGroup(ageGroup)})
                     </div>
                     <input
@@ -135,36 +146,37 @@ const initGuests = () => {
                         onchange="handleGuestPresentChange(event, '${id}')"
                     />
                     <a
-                        style="color: #C46316; margin: 0 0 0 10px""
+                        style="color: ${mainColor(present)}; margin: 0 0 0 10px""
                         href="#"
                         role="button"
-                        onclick="handleGuestDelete(event, '${id}')"
+                        onclick="handleGuestDelete(event, '${id}', '${name}')"
                         >
                         <i class="far fa-lg fa-trash-alt"></i>
                     </a>
                     <a
                         id="edit-a-${id}"
-                        style="color: #C46316; margin: 0 0 0 10px"
+                        style="color: ${mainColor(present)}; margin: 0 0 0 10px"
                         role="button"
                         onclick="handleGuestEditChange('${id}')"
                         >
                         <i class="far fa-lg fa-edit"></i>
                     </a>
                 </div>
-                <div class="rounded" style="display: ${oppenedEditId == id ? 'block' : 'none'}; padding: 0.5rem 1.5rem; background-color: ${present ? '#b8d8be' : '#fdf5ee'};" id="edit-div-${id}">
+                <div class="rounded" style="display: ${oppenedEditId == id ? 'block' : 'none'}; padding: 0.5rem .75rem; background-color: transparent;" id="edit-div-${id}">
                     <form class="d-flex justify-content-center align-items-center" onsubmit="handleGuestChange(event, '${id}')">
                         <input type="text" id="add-input-${id}" class="form-control" value="${name}" />
                         <button type="submit" class="btn btn-info ms-2">Zapisz</button>
                     </form>
                     ${renderOptions({ id, name, ageGroup })}
-                    <form class="d-flex justify-content-center align-items-center" onsubmit="handleSubGuestAddChange(event, '${id}')">
-                        <select name="guest-selector" id="guest-selector-${id}" class="form-control" multiple>
+                    <p>Osoby towarzyszące</p>
+                    <form class="d-flex justify-content-center align-items-start" onsubmit="handleSubGuestAddChange(event, '${id}')">
+                        <select name="guest-selector" id="guest-selector-${id}" class="form-control" style="padding: 0" multiple onchange="handleSelectOnChange(event, '${id}')">
                             <option value="volvo">Volvo</option>
                             <option value="saab">Saab</option>
                             <option value="mercedes">Mercedes</option>
                             <option value="audi">Audi</option>
                         </select>
-                        <button type="submit" class="btn btn-info ms-2">Dodaj os. tow.</button>
+                        <button type="submit" class="btn btn-info ms-2" id="guest-selector-btn-${id}" disabled>Dodaj os. tow.</button>
                     </form>
                 </div>
             </div>
@@ -251,14 +263,11 @@ const initGuests = () => {
         }
 
         var editDiv = document.getElementById('edit-div-' + id);
-        var editIcon = document.getElementById('edit-a-' + id);
         if (editDiv.style.display === "none") {
             editDiv.style.display = "block";
-            editIcon.style.color = 'gray';
             oppenedEditId = id;
         } else {
             editDiv.style.display = "none";
-            editIcon.style.color = '#C46316';
             oppenedEditId = undefined;
         }
     };
@@ -325,6 +334,18 @@ const initGuests = () => {
     };
     window.handleSubGuestDeleteChange = handleSubGuestDeleteChange;
 
+    const handleSelectOnChange = (ev, id) => {
+        const input = document.querySelector("#guest-selector-" + id);
+        const btn = document.querySelector("#guest-selector-btn-" + id);
+        btn.disabled = input.value != "" ? false : true;
+    };
+    window.handleSelectOnChange = handleSelectOnChange;
+
+    const handleNewGuestInputOnChange = (ev) => {
+        guestAddBtn.disabled = guestAddInput.value != "" ? false : true;
+    };
+    window.handleNewGuestInputOnChange = handleNewGuestInputOnChange;
+
     const form = document.querySelector("#guest-form");
     form.onsubmit = (ev) => {
         ev.preventDefault();
@@ -339,3 +360,8 @@ const optionsDiv = document.querySelector("#options-form");
 optionsDiv.innerHTML = renderOptions({ name: '', ageGroup: 3 });
 
 initGuests();
+
+const guestAddInput = document.querySelector("#add-input");
+const guestAddBtn = document.querySelector("#add-input-btn");
+guestAddInput.addEventListener('input', handleNewGuestInputOnChange);
+guestAddInput.addEventListener('propertychange', handleNewGuestInputOnChange);
