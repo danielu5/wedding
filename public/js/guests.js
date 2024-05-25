@@ -131,7 +131,7 @@ const initGuests = () => {
     }
 
     const renderItem = ({ id, name, present, ageGroup, SubGuests }) => `
-        <div class="my-3 rounded p-0" >
+        <div class="my-2 rounded p-0" >
             <div class="rounded" style="background-color: ${present ? '#d2e7d6' : '#fdf5ee'};">
                 <div class="rounded list-group-item d-flex align-items-center border-0" style="background-color: transparent;">
                     <div style="flex-grow: 1;">

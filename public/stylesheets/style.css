@@ -1,10 +1,9 @@
 
 body {
-  --mdb-body-font-size: 1.2rem;
+  --mdb-body-font-size: 1rem;
   --green-main: #1F7D1F;
   --brown-main: #c07436;
   background-color: #fdf5ee;
-  padding: 20px;
 }
 
 a {
@@ -33,6 +32,7 @@ p {
   text-align: center;
   font-size: calc(var(--mdb-body-font-size) * 0.72) ;
   box-shadow: none;
+  padding: .625rem 1.5rem .5rem;
 }
 
 .btn.active,
