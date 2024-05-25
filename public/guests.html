@@ -1,0 +1,47 @@
+<html>
+
+<head>
+    <title>Anna & Daniel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bellefair&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Cormorant+SC:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.css" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+</head>
+
+<body>
+    <h1 class="text-center">GOŚCIE WESELNI</h1>
+    <p class="text-center" style="line-height: 1.2;" id="stats-label"></p>
+    <section>
+        <div class="container-lg p-4">
+            <div class="row d-flex justify-content-center align-items-center">
+                <div class="col col-xl-10">
+                    <div class="card">
+                        <div class="card-body p-4">
+                            <form class="d-flex justify-content-center align-items-center" id="guest-form">
+                                <div class="form-outline flex-fill">
+                                    <input type="text" id="add-input" class="form-control" />
+                                    <label class="form-label" for="add-input">Nowy gość...</label>
+                                </div>
+                                <button type="submit" class="btn btn-info ms-2">Dodaj</button>
+                            </form>
+                            <div id="options-form"></div>
+                            <ul class="list-group mb-0" id="guest-list"></ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.js"></script>
+    <script type="text/javascript" src="../js/guests.js"></script>
+
+</body>
+
+</html>

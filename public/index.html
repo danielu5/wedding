@@ -1,102 +1,168 @@
 <html>
-  <head>
-    <title>To Do App</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
-    <link rel="stylesheet" href="/stylesheets/style.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.css"
-    />
-  </head>
 
-  <body>
+<head>
+  <title>Anna & Daniel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bellefair&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Cormorant+SC:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
 
-    <!-- REMOVE MESSAGE BEGIN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.css" />
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+</head>
 
-    <div class="container-lg mb-6">
-      <div style="background-color: rgb(4 0 255 / 6%); padding: 15px; border-radius: 10px; margin-top: 10px;">
-        <div class="row">
-          <div class="col col-12 col-md-2 text-center d-inline">
-            <img src="https://adaptable.io/img/party-popper.svg" style="max-width: 150px;" />
-          </div>
-          <div class="col col-12 col-md-8 text-center">
-            <h2 class="display-4 mt-3">Congratulations!</h2>
-            <p style="font-size: 1.5rem">
-              Your app is now running on
-            </p>
-            <img src="https://adaptable.io/img/color lockup.svg" style="max-width: 200px;" />
-          </div>
-          <div class="col col-md-2 text-center d-none d-md-block">
-            <img src="https://adaptable.io/img/party-popper.svg" style="max-width: 150px;" />
-          </div>
-        </div>
+<body>
+  <h1 class="text-center" id="guest">GOŚCIE WESELNI</h1>
+  <h1 class="text-center">Anna & Daniel</h1>
 
-        <h2 class="display-5 text-center mt-5">What's Next?</h2>
+  <h2 class="text-center"><b id="demo"></b></h2>
 
-        <p class="text-center width-limited-text mb-4">
-          Get started by checking out your new app.
-          Add tasks to your To Do List <a href="#todo">below</a>.
-          They're saved to your new MongoDB instance via your REST API based on <a href="https://expressjs.com" target="_blank">Express</a> and <a href="https://prisma.io" target="_blank">Prisma</a>.
-          Then, try out some of the suggestions in the pre-populated To Do items.
-        </p>
+  <script>
+    // Set the date we're counting down to
+    var countDownDate = new Date("Oct 12, 2024 15:30:00").getTime();
 
-        <div class="row mt-4">
-          <p class="text-center">
-            See the <a href="https://adaptable.io/docs/starters/express-prisma-mongo-starter#what-s-next" target="_blank">Express + Prisma + MongoDB Starter Guide</a> for step-by-step
-            instructions for each.
-          </p>
-          <p class="text-center">
-            <a target="_blank" href="https://adaptable.io/docs/starters/express-prisma-mongo-starter#what-s-next" style="background: #363795; padding: 13px 30px; border-radius: 30px; color: #fff; font-size:18px; text-decoration: none;">Go to the Starter Guide</a>
-          </p>
+    // Update the count down every 1 second
+    var x = setInterval(function () {
+
+      // Get today's date and time
+      var now = new Date().getTime();
+
+      // Find the distance between now and the count down date
+      var distance = countDownDate - now;
+
+      // Time calculations for days, hours, minutes and seconds
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Output the result in an element with id="demo"
+      document.getElementById("demo").innerHTML = days + " dni " + hours + " godzin "
+        + minutes + " minut " + seconds + " sekund ";
+
+      // If the count down is over, write some text 
+      if (distance < 0) {
+        clearInterval(x);
+        document.getElementById("demo").innerHTML = "EXPIRED";
+      }
+    }, 1000);
+  </script>
+
+  <section>
+    <div class="container-lg p-4">
+      <div class="row d-flex justify-content-center align-items-center">
+        <div class="col col-xl-10">
+          <table width="100%">
+            <tr>
+              <td>
+                <div class="row d-flex justify-content-center align-items-center">
+                  <div class="col col-xl-10">
+                    <div
+                      class="col content-box-wrapper content-wrapper link-area-link-icon content-icon-wrapper-yes icon-hover-animation-fade"
+                      style="background-color:rgba(255,255,255,0);" data-animationoffset="top-into-view">
+                      <div class="heading heading-with-icon icon-left">
+                        <div aria-hidden="true" class="image"><img
+                            src="https://pure-love.pl/wp-content/uploads/2022/04/Panna-Mloda.png" width="100"
+                            height="100" alt=""></div>
+                        <h2 class="content-box-heading fusion-responsive-typography-calculated"
+                          style="font-size: 24px; line-height: 1.21; --fontSize: 24;" data-fontsize="24"
+                          data-lineheight="29.04px">Panna
+                          Młoda</h2>
+                      </div>
+                      <div class="fusion-clearfix"></div>
+                      <div class="content-container" style="color:var(--awb-color8);">
+                        <p>Anna Ołtarzewska<br>
+                          Tel: 555 555 555</p>
+                      </div>
+                    </div>
+                  </div>
+
+              </td>
+              <td>
+                <div class="row d-flex justify-content-center align-items-center">
+                  <div class="heading heading-with-icon icon-left">
+                    <div aria-hidden="true" class="image"><img
+                        src="https://pure-love.pl/wp-content/uploads/2022/04/Pan-mlody.png" width="100" height="100"
+                        alt=""></div>
+                    <h2 class="content-box-heading fusion-responsive-typography-calculated"
+                      style="font-size: 24px; line-height: 1.21; --fontSize: 24;" data-fontsize="24"
+                      data-lineheight="29.04px">Pan Młody
+                    </h2>
+                  </div>
+                  <div class="fusion-clearfix"></div>
+                  <div class="content-container" style="color:var(--awb-color8);">
+                    <p>Daniel Molenda<br>
+                      Tel: 555 555 555</p>
+                  </div>
+                </div>
+
+              </td>
+            </tr>
+          </table>
+
+
         </div>
       </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  </section>
 
-    <!-- REMOVE MESSAGE END -->
-
-    <h1 class="text-center" id="todo">Express + Prisma + MongoDB</h1>
-    <h2 class="text-center">To Do List</h2>
-
-    <section style="background-color:rgb(4 0 255 / 6%);">
-      <div class="container-lg p-5">
-        <div class="row d-flex justify-content-center align-items-center">
-          <div class="col col-xl-10">
-
-            <div class="card">
-              <div class="card-body p-5">
-
-              <form class="d-flex justify-content-center align-items-center mb-4" id="guest-form">
-                  <div class="form-outline flex-fill">
-                    <input type="text" id="add-input" class="form-control" />
-                  <label class="form-label" for="add-input">Nowy gość...</label>
+  <section>
+    <div class="container-lg p-4">
+      <div class="row d-flex justify-content-center align-items-center">
+        <div class="col col-xl-10">
+          <table width="100%">
+            <tr>
+              <td>
+                <h2 class="text-center">Ceremonia zaślubin</h2>
+                <p class="text-center">Kościół św. Józefa w Jedlni-Letnisko <br /> Wojciechowskiego 12, 26-630
+                  Jedlnia-Letnisko</p>
+              </td>
+              <td>
+                <h2 class="text-center">Przyjęcie weselne</h2>
+                <p class="text-center">Dom Weselny Castello <br /> Czarna Wieś 45c, 26-670 Czarna</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="card">
+                  <div class="card-body p-0">
+                    <div class="mapwrapper">
+                      <iframe class="googlemap"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2487.3063159902836!2d21.325192479345713!3d51.434168200000016!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47188aa5a1f81d87%3A0x9736ab13a114de61!2zS2_Fm2Npw7PFgiDFm3cuIErDs3plZmEgdyBKZWRsbmktTGV0bmlza28!5e0!3m2!1spl!2spl!4v1716404085214!5m2!1spl!2spl"
+                        width="100%" height="100%" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                      </iframe>
+                    </div>
                   </div>
-                <button type="submit" class="btn btn-info ms-2">Dodaj</button>
-              </form>
-              <form class="d-flex justify-content-left align-items-center mb-4" id="guest-form">
-                <input class="form-check-input m-2" type="radio" id="age1" name="age" value="30">
-                <label for="age1">0-5</label><br>
-                <input class="form-check-input m-2" type="radio" id="age2" name="age" value="60">
-                <label for="age2">5-10</label><br>
-                <input class="form-check-input m-2" type="radio" id="age3" name="age" value="100" checked>
-                <label for="age3">>11</label>
-                </form>
+                </div>
+              </td>
+              <td>
+                <div class="card">
+                  <div class="card-body p-0">
+                    <div class="mapwrapper">
+                      <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2487.0231673121384!2d21.430345376896586!3d51.43936841567062!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47188a2ffe10de39%3A0x25892e12b0f7500!2sDom%20Weselny%20Castello!5e0!3m2!1spl!2spl!4v1716408492340!5m2!1spl!2spl"
+                        width="100%" height="100%" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                      </iframe>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
 
-              <ul class="list-group mb-0" id="guest-list" />
 
-              </div>
-            </div>
-
-          </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.js" ></script>
-    <script type="text/javascript" src="../js/client.js" ></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.js"></script>
+  <script type="text/javascript" src="../js/client.js"></script>
 
-  </body>
+</body>
+
 </html>

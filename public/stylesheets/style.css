@@ -1,13 +1,86 @@
+
 body {
+  --mdb-body-font-size: 1.2rem;
+  background-color: #fdf5ee;
   padding: 20px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
+  color: #C46316;
 }
 
 .width-limited-text {
   max-width: 600px;
   margin: auto;
+}
+
+h1, h2, h3, p, label, input, button, span, .btn, .card-body {
+  font-family: "Cormorant SC" , serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.btn {
+  color: #fff;
+  background-color: #C46316;
+  white-space: nowrap;
+  text-align: center;
+  font-size: calc(var(--mdb-body-font-size) * 0.72) ;
+  box-shadow: none;
+}
+
+.btn.active,
+.btn.active:focus,
+.btn.focus,
+.btn:active,
+.btn:active:focus,
+.btn:focus,
+.btn:hover {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .2), 0 4px 20px 0 rgba(0, 0, 0, .1)
+}
+
+.btn-info.focus,
+.btn-info:focus,
+.btn-info:hover {
+  color: #fff;
+  background-color: #ad6428
+}
+
+.form-control {
+  font-size: var(--mdb-body-font-size);
+}
+
+input {
+  font-size: var(--mdb-body-font-size);
+}
+
+.form-check-input[type=checkbox]:checked {
+  background-image: none;
+  background-color: #C46316
+}
+
+.form-check-input:checked {
+  border-color: #C46316
+}
+
+.form-check-input[type=radio]:checked:after {
+  border-color: #C46316;
+  background-color: #C46316;
+}
+
+.mapwrapper {
+  position: relative;
+  width: 100%px;
+  height: 400px;
+  border-radius: .5em;
+  overflow: hidden;
+  transform: translateY(0px);
+}
+
+td {
+  padding: 1em;
+}
+
+select[multiple]:focus option:checked {
+  background: #C46316 linear-gradient(0deg, #C46316 0%, #C46316 100%);
 }

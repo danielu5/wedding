@@ -27,7 +27,11 @@ router.post("/", asyncMiddleware(async (req, res) => {
 }));
 
 router.get('/', asyncMiddleware(async (req, res) => {
-    const guests = await prisma.Guest.findMany();
+    const guests = await prisma.Guest.findMany({
+        include: {
+            SubGuests: true
+        }
+    });
     res.json(guests);
 }));
 
@@ -41,6 +45,7 @@ router.get('/:id', asyncMiddleware(async (req, res) => {
 
 router.patch('/:id', asyncMiddleware(async (req, res) => {
     const { id } = req.params;
+    console.log(req.body);
     const updated = await prisma.Guest.update({
         where: { id },
         data: req.body,
@@ -50,6 +55,17 @@ router.patch('/:id', asyncMiddleware(async (req, res) => {
 
 router.delete('/:id', asyncMiddleware(async (req, res) => {
     const { id } = req.params;
+    const updated = await prisma.Guest.update({
+        where: { id },
+        data: {
+            SubGuests: {
+                set: []
+            }
+        },
+        include: {
+            SubGuests: true
+        }
+    });
     const deleted = await prisma.Guest.delete({
         where: { id },
     });

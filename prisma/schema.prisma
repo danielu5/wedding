@@ -11,8 +11,11 @@ datasource db {
 }
 
 model Guest {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  present  Boolean @default(false)
-  ageGroup Int     @default(3)
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  present   Boolean @default(false)
+  ageGroup  Int     @default(3)
+  ownerId   String? @db.ObjectId
+  Owner     Guest?  @relation("OwnerGuest", fields: [ownerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  SubGuests Guest[] @relation("OwnerGuest")
 }
