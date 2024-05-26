@@ -39,6 +39,9 @@ router.get('/:id', asyncMiddleware(async (req, res) => {
     const { id } = req.params;
     const guest = await prisma.Guest.findFirst({
         where: { id },
+        include: {
+            SubGuests: true
+        }
     });
     res.json(guest);
 }));

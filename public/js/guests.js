@@ -135,7 +135,7 @@ const initGuests = () => {
             <div class="rounded" style="background-color: ${present ? '#d2e7d6' : '#fdf5ee'};">
                 <div class="rounded list-group-item d-flex align-items-center border-0" style="background-color: transparent;">
                     <div style="flex-grow: 1;">
-                        <b>${getName(name, SubGuests)}</b>
+                        <a style="color: #262626" href="/guest.html?id=${id}"><b>${getName(name, SubGuests)}</b></a>
                         (${renderAgeGroup(ageGroup)})
                     </div>
                     <input

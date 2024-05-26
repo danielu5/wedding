@@ -2,7 +2,8 @@
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anna & Daniel</title>
+    <title>Potwierdzenie przybycia</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -15,36 +16,24 @@
 </head>
 
 <body class="p-1">
-    <div class="p-2" style="position: sticky; top: 0px; background: #fdf5ee; z-index: 1000;">
-        <h1 class="text-center">GOŚCIE</h1>
-        <p class="text-center" style="line-height: 1.2;" id="stats-label"></p>
-    </div>
+    <h1 class="text-center">Potwierdzenie</h1>
     <section>
         <div class="container-lg py-2">
             <div class="row d-flex justify-content-center align-items-center">
                 <div class="col col-xl-10">
-                    <div class="card">
-                        <div class="card-body p-3">
-                            <form class="d-flex justify-content-center align-items-center" id="guest-form">
-                                <div class="form-outline flex-fill">
-                                    <input type="text" id="add-input" class="form-control" />
-                                    <label class="form-label" for="add-input">Nowy gość...</label>
-                                </div>
-                                <button type="submit" class="btn btn-info ms-2" style="padding: .66rem 1.5rem .50rem"
-                                    id="add-input-btn" disabled>Dodaj</button>
-                            </form>
-                            <div id="options-form"></div>
-                            <ul class="list-group mb-0" id="guest-list"></ul>
-                        </div>
-                    </div>
+                    <div class="card p-3">
+                        <div class="card-body p-0" id="guest-div">
 
+                        </div>
+                        <button type="submit" class="btn btn-info">Zapisz</button>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.js"></script>
-    <script type="text/javascript" src="../js/guests.js"></script>
+    <script type="text/javascript" src="../js/guest.js"></script>
 
 </body>
 
