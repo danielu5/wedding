@@ -73,11 +73,11 @@ const initGuests = () => {
         if (showSubGuests() == false || SubGuests == null || SubGuests.length === 0) {
             return '';
         } else {
-            return SubGuests.map((guest) => renderSubItem(id, guest.id, guest.name, guest.present, guest.ageGroup, guest.SubGuests)).join("");
+            return SubGuests.map((guest) => renderSubItem(id, guest.id, guest.name, guest.present, guest.afterparty, guest.ageGroup, guest.SubGuests)).join("");
         }
     };
 
-    const renderSubItem = (ownerId, id, name, present, ageGroup, SubGuests) => `
+    const renderSubItem = (ownerId, id, name, present, afterparty, ageGroup, SubGuests) => `
         <div class="rounded mt-1" style="background-color: ${present ? '#e8f4ea' : '#faf7f4'};">
             <div class=" rounded list-group-item d-flex align-items-center border-0" style="background-color: transparent;">
                 <div style="flex-grow: 1;">
@@ -90,6 +90,13 @@ const initGuests = () => {
                     value=""
                     ${present ? "checked" : ""}
                     onchange="handleGuestPresentChange(event, '${id}')"
+                />
+                <input
+                    class="form-check-input me-2"
+                    type="checkbox"
+                    value=""
+                    ${afterparty ? "checked" : ""}
+                    onchange="handleGuestAfterpartyChange(event, '${id}')"
                 />
                 <a
                     style="color: ${mainColor(present)}; margin: 0 0 0 10px""
@@ -130,7 +137,7 @@ const initGuests = () => {
         }
     }
 
-    const renderItem = ({ id, name, present, ageGroup, SubGuests }) => `
+    const renderItem = ({ id, name, present, afterparty, ageGroup, SubGuests }) => `
         <div class="my-2 rounded p-0" >
             <div class="rounded" style="background-color: ${present ? '#d2e7d6' : '#fdf5ee'};">
                 <div class="rounded list-group-item d-flex align-items-center border-0" style="background-color: transparent;">
@@ -144,6 +151,13 @@ const initGuests = () => {
                         value=""
                         ${present ? "checked" : ""}
                         onchange="handleGuestPresentChange(event, '${id}')"
+                    />
+                    <input
+                        class="form-check-input me-2"
+                        type="checkbox"
+                        value=""
+                        ${afterparty ? "checked" : ""}
+                        onchange="handleGuestAfterpartyChange(event, '${id}')"
                     />
                     <a
                         style="color: ${mainColor(present)}; margin: 0 0 0 10px""
@@ -226,7 +240,10 @@ const initGuests = () => {
             const age1Present = allGuests.filter(guest => guest.ageGroup == 1 && guest.present).length;
             const age2Present = allGuests.filter(guest => guest.ageGroup == 2 && guest.present).length;
             const age3Present = allGuests.filter(guest => guest.ageGroup == 3 && guest.present).length;
-            statsLabel.innerHTML = `Dorośli: ${age3Present}/${age3Count}<br/>Dzieci (5-10): ${age2Present}/${age2Count}<br/>Dzieci (0-5): ${age1Present}/${age1Count}`;
+            const age1Afterparty = allGuests.filter(guest => guest.ageGroup == 1 && guest.afterparty).length;
+            const age2Afterparty = allGuests.filter(guest => guest.ageGroup == 2 && guest.afterparty).length;
+            const age3Afterparty = allGuests.filter(guest => guest.ageGroup == 3 && guest.afterparty).length;
+            statsLabel.innerHTML = `Dorośli: ${age3Present}/${age3Afterparty}/${age3Count}<br/>Dzieci (5-10): ${age2Present}/${age2Afterparty}/${age2Count}<br/>Dzieci (0-5): ${age1Present}/${age1Afterparty}/${age1Count}`;
         };
         doRefresh().catch(err => console.log("Error refreshing list", err));
     };
@@ -262,6 +279,19 @@ const initGuests = () => {
         doChange().catch(err => console.log("Error changing guest done state", err));
     };
     window.handleGuestPresentChange = handleGuestPresentChange;
+
+    const handleGuestAfterpartyChange = (ev, id) => {
+        const doChange = async () => {
+            console.log(id);
+            console.log(ev.target.checked);
+            await apiFetch(`/guests/${id}`, "PATCH", { afterparty: ev.target.checked });
+
+            refreshList();
+        }
+
+        doChange().catch(err => console.log("Error changing guest afterparty state", err));
+    };
+    window.handleGuestAfterpartyChange = handleGuestAfterpartyChange;
 
     const handleGuestEditChange = (id) => {
         if (oppenedEditId != null && oppenedEditId != id) {
