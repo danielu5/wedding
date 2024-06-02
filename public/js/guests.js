@@ -192,12 +192,19 @@ const initGuests = () => {
 
     const refreshList = () => {
         const doRefresh = async () => {
+            const contains = (guest, filter) => {
+                return guest && guest.name.toUpperCase().indexOf(filter) > -1;
+            }
             const statsLabel = document.querySelector("#stats-label");
             const list = document.querySelector("#guest-list");
             const selectorr = document.getElementsByName("guest-selector");
 
             const resp = await apiFetch("/guests");
-            const allGuests = await resp.json();
+            var allGuests = await resp.json();
+            const filter = searchInput.value.toUpperCase();
+            if (filter) {
+                allGuests = allGuests.filter(guest => contains(guest, filter) || guest.SubGuests.some((g) => contains(g, filter)))
+            }
             const guests = allGuests.filter(guest => guest.ownerId == null || guest.ownerId == guest.id);
 
             if (guests.length === 0) {
@@ -352,6 +359,15 @@ const initGuests = () => {
         addItem().catch(err => console.log("Error adding item", err));
     };
 
+    const searchInput = document.getElementById('search-input');
+
+    const inputHandler = function (e) {
+        refreshList();
+    }
+
+    searchInput.addEventListener('input', inputHandler);
+    searchInput.addEventListener('propertychange', inputHandler);
+
     refreshList();
 }
 
@@ -365,3 +381,5 @@ const guestAddInput = document.querySelector("#add-input");
 const guestAddBtn = document.querySelector("#add-input-btn");
 guestAddInput.addEventListener('input', handleNewGuestInputOnChange);
 guestAddInput.addEventListener('propertychange', handleNewGuestInputOnChange);
+
+

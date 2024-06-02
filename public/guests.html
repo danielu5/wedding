@@ -15,12 +15,22 @@
 </head>
 
 <body class="p-1">
-    <div class="p-2" style="position: sticky; top: 0px; background: #fdf5ee; z-index: 1000;">
-        <h1 class="text-center">GOŚCIE</h1>
-        <p class="text-center" style="line-height: 1.2;" id="stats-label"></p>
+    <div class="container-lg py-2" style="position: sticky; top: 0px; background: #fdf5ee; z-index: 1000;">
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="col col-xl-10">
+                <div class="p-2" >
+                    <h1 class="text-center">GOŚCIE</h1>
+                    <p class="text-center" style="line-height: 1.2;" id="stats-label"></p>
+                </div>
+                <div class="form-outline flex-fill">
+                    <input type="text" id="search-input" class="form-control" />
+                    <label class="form-label" for="search-input">Szukaj...</label>
+                </div>
+            </div>
+        </div>
     </div>
     <section>
-        <div class="container-lg py-2">
+        <div class="container-lg pb-2">
             <div class="row d-flex justify-content-center align-items-center">
                 <div class="col col-xl-10">
                     <div class="card">
