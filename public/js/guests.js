@@ -31,7 +31,7 @@ const renderOptions = ({ id, name, ageGroup, groups }) => {
             <label class="options-label" for="age3">>10 lat</label>
         </form>
         <p>Grupy</p>
-        <input type="text" id="groups-input${idSuffix}" class="form-control" value="${groups ?? ''}" />
+        <input type="text" list="groups-datalist" id="groups-input${idSuffix}" class="form-control" value="${groups ?? ''}" />
         `;
 };
 
@@ -224,6 +224,7 @@ const initGuests = () => {
             }
             const statsLabel = document.querySelector("#stats-label");
             const list = document.querySelector("#guest-list");
+            const groupdataSet = document.querySelector("#groups-datalist");
             const selectorr = document.getElementsByName("guest-selector");
 
             const resp = await apiFetch("/guests");
@@ -235,6 +236,7 @@ const initGuests = () => {
             const guests = allGuests.filter(guest => guest.ownerId == null || guest.ownerId == guest.id);
 
             const groups = [...new Set(guests.filter(guest => guest.groups).map(guest => guest.groups).sort())];
+            groupdataSet.innerHTML = groups.map(group => `<option value="${group}"/>`).join("");
             list.innerHTML = "";
 
             if (guests.length === 0) {
