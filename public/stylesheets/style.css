@@ -6,6 +6,25 @@ body {
   background-color: #fdf5ee;
 }
 
+@font-face {
+  font-family: 'Le Jour Script';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Le Jour Script'), url('./fonts/LeJourScript-Eaqpg.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Le Jour Serif';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Le Jour Serif'), url('./fonts/LeJourSerif-OVZMo.woff') format('woff');
+}
+
+.le-jour-font {
+  font-family: 'Le Jour Script';
+  font-weight: normal;
+}
+
 a {
   color: var(--brown-main);
 }
