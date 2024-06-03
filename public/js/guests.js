@@ -18,7 +18,7 @@ const apiFetch = async (url, method, body) => {
     return resp;
 };
 
-const renderOptions = ({ id, name, ageGroup }) => {
+const renderOptions = ({ id, name, ageGroup, groups }) => {
     const idSuffix = id == null ? '' : ('-' + id);
     return `
         <p>Wiek</p>
@@ -30,6 +30,8 @@ const renderOptions = ({ id, name, ageGroup }) => {
             <input class="form-check-input mx-2" type="radio" id="age3${idSuffix}" name="age" value="100" ${ageGroup == 3 ? 'checked' : ''}>
             <label class="options-label" for="age3">>10 lat</label>
         </form>
+        <p>Grupy</p>
+        <input type="text" id="groups-input${idSuffix}" class="form-control" value="${groups ?? ''}" />
         `;
 };
 
@@ -73,12 +75,12 @@ const initGuests = () => {
         if (showSubGuests() == false || SubGuests == null || SubGuests.length === 0) {
             return '';
         } else {
-            return SubGuests.map((guest) => renderSubItem(id, guest.id, guest.name, guest.present, guest.afterparty, guest.ageGroup, guest.SubGuests)).join("");
+            return SubGuests.map((guest) => renderSubItem(id, guest.id, guest.name, guest.present, guest.afterparty, guest.ageGroup, guest.groups, guest.SubGuests)).join("");
         }
     };
 
-    const renderSubItem = (ownerId, id, name, present, afterparty, ageGroup, SubGuests) => `
-        <div class="rounded mt-1" style="background-color: ${present ? '#e8f4ea' : '#faf7f4'};">
+    const renderSubItem = (ownerId, id, name, present, afterparty, ageGroup, groups, SubGuests) => `
+        <div class="rounded" style="background-color: ${present ? '#e8f4ea' : '#faf7f4'};">
             <div class=" rounded list-group-item d-flex align-items-center border-0" style="background-color: transparent;">
                 <div style="flex-grow: 1;">
                     ${name}
@@ -120,7 +122,7 @@ const initGuests = () => {
                     <input type="text" id="add-input-${id}" class="form-control" value="${name}" />
                     <button type="submit" class="btn btn-info ms-2">Zapisz</button>
                 </form>
-                ${renderOptions({ id, name, ageGroup })}
+                ${renderOptions({ id, name, ageGroup, groups })}
               
             </div>
         </div>
@@ -137,7 +139,7 @@ const initGuests = () => {
         }
     }
 
-    const renderItem = ({ id, name, present, afterparty, ageGroup, SubGuests }) => `
+    const renderItem = ({ id, name, present, afterparty, ageGroup, groups, SubGuests }) => `
         <div class="my-2 rounded p-0" >
             <div class="rounded" style="background-color: ${present ? '#d2e7d6' : '#fdf5ee'};">
                 <div class="rounded list-group-item d-flex align-items-center border-0" style="background-color: transparent;">
@@ -181,7 +183,7 @@ const initGuests = () => {
                         <input type="text" id="add-input-${id}" class="form-control" value="${name}" />
                         <button type="submit" class="btn btn-info ms-2">Zapisz</button>
                     </form>
-                    ${renderOptions({ id, name, ageGroup })}
+                    ${renderOptions({ id, name, ageGroup, groups })}
                     <p>Osoby towarzyszące</p>
                     <form class="d-flex justify-content-center align-items-start" onsubmit="handleSubGuestAddChange(event, '${id}')">
                         <select name="guest-selector" id="guest-selector-${id}" class="form-control" style="padding: 0" multiple onchange="handleSelectOnChange(event, '${id}')">
@@ -194,8 +196,19 @@ const initGuests = () => {
                     </form>
                 </div>
             </div>
+            <div class="rounded" style="background-color: ${present ? '#e8f4ea' : '#faf7f4'};">
             ${renderSubGuests({ id, SubGuests })}
+            </div>
         </div>
+    `;
+
+    const renderGroup = (group, guests) => `
+    <div class="mb-2">
+        <p>${group}</p>
+        <div class="rounded border px-2" >
+            ${guests}
+        </div>
+    </div>
     `;
 
     const noItems = `
@@ -221,11 +234,18 @@ const initGuests = () => {
             }
             const guests = allGuests.filter(guest => guest.ownerId == null || guest.ownerId == guest.id);
 
+            const groups = [...new Set(guests.filter(guest => guest.groups).map(guest => guest.groups).sort())];
+            list.innerHTML = "";
+
             if (guests.length === 0) {
                 list.innerHTML = noItems;
                 selectorr.forEach((element) => element.innerHTML = "");
             } else {
-                list.innerHTML = guests.map(renderItem).join("");
+                groups.forEach(element => {
+                    const groupGuests = guests.filter(guest => guest.groups == element).map(renderItem).join("");
+                    list.innerHTML += renderGroup(element, groupGuests);
+                });
+                list.innerHTML += guests.filter(guest => !guest.groups).map(renderItem).join("");// renderGroup("Bez grupy", guests.filter(guest => !guest.groups).map(renderItem).join(""));
                 selectorr
                     .forEach((element) => element.innerHTML =
                         guests
@@ -243,7 +263,7 @@ const initGuests = () => {
             const age1Afterparty = allGuests.filter(guest => guest.ageGroup == 1 && guest.afterparty).length;
             const age2Afterparty = allGuests.filter(guest => guest.ageGroup == 2 && guest.afterparty).length;
             const age3Afterparty = allGuests.filter(guest => guest.ageGroup == 3 && guest.afterparty).length;
-            statsLabel.innerHTML = `Dorośli: ${age3Present}/${age3Afterparty}/${age3Count}<br/>Dzieci (5-10): ${age2Present}/${age2Afterparty}/${age2Count}<br/>Dzieci (0-5): ${age1Present}/${age1Afterparty}/${age1Count}`;
+            statsLabel.innerHTML = `Dorośli: ${age3Present}/${age3Afterparty}/<b>${age3Count}</b><br/>Dzieci (5-10): ${age2Present}/${age2Afterparty}/<b>${age2Count}</b><br/>Dzieci (0-5): ${age1Present}/${age1Afterparty}/<b>${age1Count}</b>`;
         };
         doRefresh().catch(err => console.log("Error refreshing list", err));
     };
@@ -263,9 +283,13 @@ const initGuests = () => {
             ageGroup = 3;
         }
 
-        await apiFetch("/guests", "POST", { name, present: false, ageGroup });
+        const groupsInput = document.querySelector("#groups-input");
+        const groups = groupsInput.value;
+
+        await apiFetch("/guests", "POST", { name, present: false, ageGroup, groups });
 
         input.value = "";
+        groupsInput.value = "";
         refreshList();
     };
 
@@ -324,7 +348,10 @@ const initGuests = () => {
             } else if (document.getElementById('age3-' + id).checked == true) {
                 ageGroup = 3;
             }
-            await apiFetch(`/guests/${id}`, "PATCH", { name, ageGroup });
+
+            const groups = document.querySelector("#groups-input-" + id).value;
+
+            await apiFetch(`/guests/${id}`, "PATCH", { name, ageGroup, groups });
 
             refreshList();
         }

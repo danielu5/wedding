@@ -16,6 +16,7 @@ model Guest {
   present    Boolean @default(false)
   afterparty Boolean @default(false)
   ageGroup   Int     @default(3)
+  groups     String?
   ownerId    String? @db.ObjectId
   Owner      Guest?  @relation("OwnerGuest", fields: [ownerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   SubGuests  Guest[] @relation("OwnerGuest")

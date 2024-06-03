@@ -14,13 +14,15 @@ const asyncMiddleware = fn => (req, res, next) => {
 };
 
 router.post("/", asyncMiddleware(async (req, res) => {
-    const { name, present, ageGroup } = req.body;
+    const { name, present, afterparty, ageGroup, groups } = req.body;
 
     const result = await prisma.Guest.create({
         data: {
             name,
             present,
-            ageGroup
+            afterparty,
+            ageGroup,
+            groups
         }
     });
     res.json(result);
