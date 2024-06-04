@@ -22,7 +22,17 @@ router.post("/", asyncMiddleware(async (req, res) => {
             present,
             afterparty,
             ageGroup,
-            groups
+            group: {
+                connectOrCreate: {
+                    where: {
+                        name: groups,
+                    },
+                    create: {
+                        name: groups,
+                        priority: groups == "" ? 1000 : 1
+                    }
+                }
+            }
         }
     });
     res.json(result);
@@ -31,7 +41,8 @@ router.post("/", asyncMiddleware(async (req, res) => {
 router.get('/', asyncMiddleware(async (req, res) => {
     const guests = await prisma.Guest.findMany({
         include: {
-            SubGuests: true
+            SubGuests: true,
+            group: true
         }
     });
     res.json(guests);
@@ -42,7 +53,8 @@ router.get('/:id', asyncMiddleware(async (req, res) => {
     const guest = await prisma.Guest.findFirst({
         where: { id },
         include: {
-            SubGuests: true
+            SubGuests: true,
+            group: true
         }
     });
     res.json(guest);
@@ -65,10 +77,14 @@ router.delete('/:id', asyncMiddleware(async (req, res) => {
         data: {
             SubGuests: {
                 set: []
+            },
+            group: {
+                set: undefined
             }
         },
         include: {
-            SubGuests: true
+            SubGuests: true,
+            group: true
         }
     });
     const deleted = await prisma.Guest.delete({

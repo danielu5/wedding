@@ -18,7 +18,7 @@ const apiFetch = async (url, method, body) => {
     return resp;
 };
 
-const renderOptions = ({ id, name, ageGroup, groups }) => {
+const renderOptions = ({ id, name, ageGroup, groupName }) => {
     const idSuffix = id == null ? '' : ('-' + id);
     return `
         <p>Wiek</p>
@@ -31,7 +31,7 @@ const renderOptions = ({ id, name, ageGroup, groups }) => {
             <label class="options-label" for="age3">>10 lat</label>
         </form>
         <p>Grupy</p>
-        <input type="text" list="groups-datalist" id="groups-input${idSuffix}" class="form-control" value="${groups ?? ''}" />
+        <input type="text" list="groups-datalist" id="groups-input${idSuffix}" class="form-control" value="${groupName ?? ''}" />
         `;
 };
 
@@ -75,11 +75,11 @@ const initGuests = () => {
         if (showSubGuests() == false || SubGuests == null || SubGuests.length === 0) {
             return '';
         } else {
-            return SubGuests.map((guest) => renderSubItem(id, guest.id, guest.name, guest.present, guest.afterparty, guest.ageGroup, guest.groups, guest.SubGuests)).join("");
+            return SubGuests.map((guest) => renderSubItem(id, guest.id, guest.name, guest.present, guest.afterparty, guest.ageGroup, guest.groupName, guest.SubGuests)).join("");
         }
     };
 
-    const renderSubItem = (ownerId, id, name, present, afterparty, ageGroup, groups, SubGuests) => `
+    const renderSubItem = (ownerId, id, name, present, afterparty, ageGroup, groupName, SubGuests) => `
         <div class="rounded" style="background-color: ${present ? '#e8f4ea' : '#faf7f4'};">
             <div class=" rounded list-group-item d-flex align-items-center border-0" style="background-color: transparent;">
                 <div style="flex-grow: 1;">
@@ -122,7 +122,7 @@ const initGuests = () => {
                     <input type="text" id="add-input-${id}" class="form-control" value="${name}" />
                     <button type="submit" class="btn btn-info ms-2">Zapisz</button>
                 </form>
-                ${renderOptions({ id, name, ageGroup, groups })}
+                ${renderOptions({ id, name, ageGroup, groupName })}
               
             </div>
         </div>
@@ -139,7 +139,7 @@ const initGuests = () => {
         }
     }
 
-    const renderItem = ({ id, name, present, afterparty, ageGroup, groups, SubGuests }) => `
+    const renderItem = ({ id, name, present, afterparty, ageGroup, groupName, SubGuests }) => `
         <div class="my-2 rounded p-0" >
             <div class="rounded" style="background-color: ${present ? '#d2e7d6' : '#fdf5ee'};">
                 <div class="rounded list-group-item d-flex align-items-center border-0" style="background-color: transparent;">
@@ -183,7 +183,7 @@ const initGuests = () => {
                         <input type="text" id="add-input-${id}" class="form-control" value="${name}" />
                         <button type="submit" class="btn btn-info ms-2">Zapisz</button>
                     </form>
-                    ${renderOptions({ id, name, ageGroup, groups })}
+                    ${renderOptions({ id, name, ageGroup, groupName })}
                     <p>Osoby towarzyszące</p>
                     <form class="d-flex justify-content-center align-items-start" onsubmit="handleSubGuestAddChange(event, '${id}')">
                         <select name="guest-selector" id="guest-selector-${id}" class="form-control" style="padding: 0" multiple onchange="handleSelectOnChange(event, '${id}')">
@@ -204,7 +204,11 @@ const initGuests = () => {
 
     const renderGroup = (group, guests) => `
     <div class="mb-2">
-        <p>${group}</p>
+        <div class="d-flex justify-content-center align-items-center">
+            <p class="flex-fill">${group.name}</p>
+            <input class="form-control" type="number" min="1" max="1000" value="${group.priority}" onkeydown="handleGroupPriorityChange(event, '${group.name}')" ${group.name ? "" : "hidden"}/>
+        </div>
+        
         <div class="rounded border px-2" >
             ${guests}
         </div>
@@ -235,19 +239,23 @@ const initGuests = () => {
             }
             const guests = allGuests.filter(guest => guest.ownerId == null || guest.ownerId == guest.id);
 
-            const groups = [...new Set(guests.filter(guest => guest.groups).map(guest => guest.groups).sort())];
-            groupdataSet.innerHTML = groups.map(group => `<option value="${group}"/>`).join("");
-            list.innerHTML = "";
-
             if (guests.length === 0) {
                 list.innerHTML = noItems;
                 selectorr.forEach((element) => element.innerHTML = "");
             } else {
+                const respGroups = await apiFetch("/groups");
+                var groups = await respGroups.json();
+                console.log(groups);
+                groups = groups.filter(group => group.guests.length > 0).sort((a, b) => a.priority - b.priority);
+
+                groupdataSet.innerHTML = groups.map(group => `<option value="${group.name}"/>`).join("");
+                list.innerHTML = "";
                 groups.forEach(element => {
-                    const groupGuests = guests.filter(guest => guest.groups == element).map(renderItem).join("");
+                    const groupGuests = guests.filter(guest => guest.groupName == element.name).map(renderItem).join("");
+                    //const groupGuests = element.guests.map(renderItem).join("");
                     list.innerHTML += renderGroup(element, groupGuests);
                 });
-                list.innerHTML += guests.filter(guest => !guest.groups).map(renderItem).join("");// renderGroup("Bez grupy", guests.filter(guest => !guest.groups).map(renderItem).join(""));
+                //list.innerHTML += guests.filter(guest => !guest.groupName).map(renderItem).join("");// renderGroup("Bez grupy", guests.filter(guest => !guest.groupName).map(renderItem).join(""));
                 selectorr
                     .forEach((element) => element.innerHTML =
                         guests
@@ -306,6 +314,18 @@ const initGuests = () => {
     };
     window.handleGuestPresentChange = handleGuestPresentChange;
 
+    const handleGroupPriorityChange = (ev, id) => {
+        const doChange = async () => {
+            await apiFetch(`/groups/${id}`, "PATCH", { priority: parseInt(ev.target.value) });
+            refreshList();
+        }
+
+        if (ev.keyCode == 13) {
+            doChange().catch(err => console.log("Error changing guest done state", err));
+        }
+    };
+    window.handleGroupPriorityChange = handleGroupPriorityChange;
+
     const handleGuestAfterpartyChange = (ev, id) => {
         const doChange = async () => {
             console.log(id);
@@ -353,7 +373,19 @@ const initGuests = () => {
 
             const groups = document.querySelector("#groups-input-" + id).value;
 
-            await apiFetch(`/guests/${id}`, "PATCH", { name, ageGroup, groups });
+            await apiFetch(`/guests/${id}`, "PATCH", {
+                name, ageGroup, group: {
+                    connectOrCreate: {
+                        where: {
+                            name: groups,
+                        },
+                        create: {
+                            name: groups,
+                            priority: groups == "" ? 1000 : 1
+                        }
+                    }
+                }
+            });
 
             refreshList();
         }
