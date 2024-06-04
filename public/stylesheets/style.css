@@ -1,9 +1,9 @@
-
 body {
   --mdb-body-font-size: 1rem;
   --green-main: #1F7D1F;
-  --brown-main: #c07436;
+  --brown-main: #c79368;
   background-color: #fdf5ee;
+  caret-color: var(--brown-main);
 }
 
 @font-face {
@@ -34,8 +34,17 @@ a {
   margin: auto;
 }
 
-h1, h2, h3, p, label, input, button, span, .btn, .card-body {
-  font-family: "Cormorant SC" , serif;
+h1,
+h2,
+h3,
+p,
+label,
+input,
+button,
+span,
+.btn,
+.card-body {
+  font-family: "Cormorant SC", serif;
   font-weight: 500;
   font-style: normal;
 }
@@ -49,7 +58,7 @@ p {
   background-color: var(--brown-main);
   white-space: nowrap;
   text-align: center;
-  font-size: calc(var(--mdb-body-font-size) * 0.72) ;
+  font-size: calc(var(--mdb-body-font-size) * 0.72);
   box-shadow: none;
   padding: .55rem 1.5rem .53rem;
 }
@@ -61,14 +70,14 @@ p {
 .btn:active:focus,
 .btn:focus,
 .btn:hover {
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .2), 0 4px 20px 0 rgba(0, 0, 0, .1)
+  box-shadow: none;
 }
 
 .btn-info.focus,
 .btn-info:focus,
 .btn-info:hover {
   color: #fff;
-  background-color: #d38443
+  background-color: #eab183
 }
 
 .btn:disabled {
@@ -97,6 +106,26 @@ input {
 .form-check-input[type=radio]:checked:after {
   border-color: var(--brown-main);
   background-color: var(--brown-main);
+}
+
+.form-check-input {
+  border: .125rem solid var(--brown-main);
+}
+
+input[type="number"] {
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
+  text-align: right;
+  width: auto;
+  padding: 0px 4px;
+  line-height: 1;
+  border: 0px;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
 }
 
 .mapwrapper {
@@ -171,4 +200,8 @@ select[multiple]:focus option:checked {
 
 .options-label {
   font-size: 1rem;
+}
+
+select[multiple] option {
+  padding: .375rem .75rem;
 }

@@ -185,8 +185,8 @@ const initGuests = () => {
                     </form>
                     ${renderOptions({ id, name, ageGroup, groupName })}
                     <p>Osoby towarzyszące</p>
-                    <form class="d-flex justify-content-center align-items-start" onsubmit="handleSubGuestAddChange(event, '${id}')">
-                        <select name="guest-selector" id="guest-selector-${id}" class="form-control" style="padding: 0" multiple onchange="handleSelectOnChange(event, '${id}')">
+                    <form class="d-flex justify-content-center align-items-center" onsubmit="handleSubGuestAddChange(event, '${id}')">
+                        <select name="guest-selector" id="guest-selector-${id}" class="form-control" multiple onchange="handleSelectOnChange(event, '${id}')">
                             <option value="volvo">Volvo</option>
                             <option value="saab">Saab</option>
                             <option value="mercedes">Mercedes</option>
