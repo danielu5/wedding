@@ -255,7 +255,7 @@ const initGuests = () => {
                     //const groupGuests = element.guests.map(renderItem).join("");
                     list.innerHTML += renderGroup(element, groupGuests);
                 });
-                //list.innerHTML += guests.filter(guest => !guest.groupName).map(renderItem).join("");// renderGroup("Bez grupy", guests.filter(guest => !guest.groupName).map(renderItem).join(""));
+                list.innerHTML += guests.filter(guest => guest.groupName == undefined).map(renderItem).join("");// renderGroup("Bez grupy", guests.filter(guest => !guest.groupName).map(renderItem).join(""));
                 selectorr
                     .forEach((element) => element.innerHTML =
                         guests
