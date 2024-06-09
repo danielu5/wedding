@@ -251,7 +251,7 @@ const initGuests = () => {
                 const respGroups = await apiFetch("/groups");
                 var groups = await respGroups.json();
                 console.log(groups);
-                groups = groups.filter(group => group.guests.length > 0).sort((a, b) => a.priority - b.priority);
+                groups = groups.filter(group => group.guests.length > 0 && group.name != '').sort((a, b) => a.priority - b.priority);
 
                 groupdataSet.innerHTML = groups.map(group => `<option value="${group.name}"/>`).join("");
                 list.innerHTML = "";
@@ -260,7 +260,7 @@ const initGuests = () => {
                     //const groupGuests = element.guests.map(renderItem).join("");
                     list.innerHTML += renderGroup(element, groupGuests);
                 });
-                list.innerHTML += guests.filter(guest => guest.groupName == undefined).map(renderItem).join("");// renderGroup("Bez grupy", guests.filter(guest => !guest.groupName).map(renderItem).join(""));
+                list.innerHTML += guests.filter(guest => guest.groupName == undefined || guest.groupName == '').map(renderItem).join("");// renderGroup("Bez grupy", guests.filter(guest => !guest.groupName).map(renderItem).join(""));
                 selectorr
                     .forEach((element) => element.innerHTML =
                         guests
