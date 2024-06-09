@@ -18,7 +18,7 @@ const apiFetch = async (url, method, body) => {
     return resp;
 };
 
-const renderOptions = ({ id, name, ageGroup, groupName }) => {
+const renderOptions = ({ id, name, ageGroup, groupName, comment }) => {
     const idSuffix = id == null ? '' : ('-' + id);
     return `
         <p>Wiek</p>
@@ -32,6 +32,9 @@ const renderOptions = ({ id, name, ageGroup, groupName }) => {
         </form>
         <p>Grupy</p>
         <input type="text" list="groups-datalist" id="groups-input${idSuffix}" class="form-control" value="${groupName ?? ''}" />
+        <p>Uwagi</p>
+        <input type="text" id="comment-input${idSuffix}" class="form-control" value="${comment ?? ''}" />
+        
         `;
 };
 
@@ -75,16 +78,17 @@ const initGuests = () => {
         if (showSubGuests() == false || SubGuests == null || SubGuests.length === 0) {
             return '';
         } else {
-            return SubGuests.map((guest) => renderSubItem(id, guest.id, guest.name, guest.present, guest.afterparty, guest.ageGroup, guest.groupName, guest.SubGuests)).join("");
+            return SubGuests.map((guest) => renderSubItem(id, guest.id, guest.name, guest.present, guest.afterparty, guest.ageGroup, guest.groupName, guest.SubGuests, guest.comment)).join("");
         }
     };
 
-    const renderSubItem = (ownerId, id, name, present, afterparty, ageGroup, groupName, SubGuests) => `
+    const renderSubItem = (ownerId, id, name, present, afterparty, ageGroup, groupName, SubGuests, comment) => `
         <div class="rounded" style="background-color: ${present ? '#e8f4ea' : '#faf7f4'};">
             <div class=" rounded list-group-item d-flex align-items-center border-0" style="background-color: transparent;">
                 <div style="flex-grow: 1;">
                     ${name}
                     (${renderAgeGroup(ageGroup)})
+                    <p style="color: red; font-size: 0.9rem;">${comment ?? ''}</p>
                 </div>
                 <input
                     class="form-check-input me-2"
@@ -122,7 +126,7 @@ const initGuests = () => {
                     <input type="text" id="add-input-${id}" class="form-control" value="${name}" />
                     <button type="submit" class="btn btn-info ms-2">Zapisz</button>
                 </form>
-                ${renderOptions({ id, name, ageGroup, groupName })}
+                ${renderOptions({ id, name, ageGroup, groupName, comment })}
               
             </div>
         </div>
@@ -139,13 +143,14 @@ const initGuests = () => {
         }
     }
 
-    const renderItem = ({ id, name, present, afterparty, ageGroup, groupName, SubGuests }) => `
+    const renderItem = ({ id, name, present, afterparty, ageGroup, groupName, SubGuests, comment }) => `
         <div class="my-2 rounded p-0" >
             <div class="rounded" style="background-color: ${present ? '#d2e7d6' : '#fdf5ee'};">
                 <div class="rounded list-group-item d-flex align-items-center border-0" style="background-color: transparent;">
                     <div style="flex-grow: 1;">
                         <a style="color: #262626" href="/guest.html?id=${id}"><b>${getName(name, SubGuests)}</b></a>
                         (${renderAgeGroup(ageGroup)})
+                        <p style="color: red; font-size: 0.9rem;">${comment ?? ''}</p>
                     </div>
                     <input
                         class="form-check-input me-2"
@@ -183,7 +188,7 @@ const initGuests = () => {
                         <input type="text" id="add-input-${id}" class="form-control" value="${name}" />
                         <button type="submit" class="btn btn-info ms-2">Zapisz</button>
                     </form>
-                    ${renderOptions({ id, name, ageGroup, groupName })}
+                    ${renderOptions({ id, name, ageGroup, groupName, comment })}
                     <p>Osoby towarzyszące</p>
                     <form class="d-flex justify-content-center align-items-center" onsubmit="handleSubGuestAddChange(event, '${id}')">
                         <select name="guest-selector" id="guest-selector-${id}" class="form-control" multiple onchange="handleSelectOnChange(event, '${id}')">
@@ -294,9 +299,10 @@ const initGuests = () => {
         }
 
         const groupsInput = document.querySelector("#groups-input");
+        const comment = document.querySelector("#comment-input").value;
         const groups = groupsInput.value;
 
-        await apiFetch("/guests", "POST", { name, present: false, ageGroup, groups });
+        await apiFetch("/guests", "POST", { name, present: false, ageGroup, groups, comment });
 
         input.value = "";
         groupsInput.value = "";
@@ -372,9 +378,12 @@ const initGuests = () => {
             }
 
             const groups = document.querySelector("#groups-input-" + id).value;
+            const comment = document.querySelector("#comment-input-" + id).value;
 
             await apiFetch(`/guests/${id}`, "PATCH", {
-                name, ageGroup, group: {
+                name,
+                ageGroup,
+                group: {
                     connectOrCreate: {
                         where: {
                             name: groups,
@@ -384,7 +393,8 @@ const initGuests = () => {
                             priority: groups == "" ? 1000 : 1
                         }
                     }
-                }
+                },
+                comment
             });
 
             refreshList();

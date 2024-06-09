@@ -14,7 +14,7 @@ const asyncMiddleware = fn => (req, res, next) => {
 };
 
 router.post("/", asyncMiddleware(async (req, res) => {
-    const { name, present, afterparty, ageGroup, groups } = req.body;
+    const { name, present, afterparty, ageGroup, groups, comment } = req.body;
 
     const result = await prisma.Guest.create({
         data: {
@@ -32,7 +32,8 @@ router.post("/", asyncMiddleware(async (req, res) => {
                         priority: groups == "" ? 1000 : 1
                     }
                 }
-            }
+            },
+            comment
         }
     });
     res.json(result);

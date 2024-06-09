@@ -21,6 +21,7 @@ model Guest {
   SubGuests  Guest[] @relation("OwnerGuest")
   group      Group?  @relation(fields: [groupName], references: [name])
   groupName  String?
+  comment    String?
 }
 
 model Group {
