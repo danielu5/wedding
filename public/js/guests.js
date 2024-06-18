@@ -242,6 +242,15 @@ const initGuests = () => {
             if (filter) {
                 allGuests = allGuests.filter(guest => contains(guest, filter) || guest.SubGuests.some((g) => contains(g, filter)))
             }
+            if (document.getElementById('filter-only-warnings').checked) {
+                allGuests = allGuests.filter(guest => guest.comment || guest.SubGuests.some(subGuest => subGuest.comment));
+            }
+            if (document.getElementById('filter-afterparty').checked) {
+                allGuests = allGuests.filter(guest => guest.afterparty || guest.SubGuests.some(subGuest => subGuest.afterparty));
+            }
+            if (document.getElementById('filter-present').checked) {
+                allGuests = allGuests.filter(guest => guest.present || guest.SubGuests.some(subGuest => subGuest.present));
+            }
             const guests = allGuests.filter(guest => guest.ownerId == null || guest.ownerId == guest.id);
 
             if (guests.length === 0) {
@@ -308,6 +317,11 @@ const initGuests = () => {
         groupsInput.value = "";
         refreshList();
     };
+
+    const handleFilterChange = (ev) => {
+        refreshList();
+    };
+    window.handleFilterChange = handleFilterChange;
 
     const handleGuestPresentChange = (ev, id) => {
         const doChange = async () => {

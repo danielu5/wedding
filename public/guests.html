@@ -28,6 +28,24 @@
                     <input type="text" id="search-input" class="form-control" />
                     <label class="form-label" for="search-input">Szukaj...</label>
                 </div>
+                <div class="d-flex flex-row">
+                    <label class="d-flex align-items-center">
+                        <input id="filter-only-warnings" class="form-check-input my-2" type="checkbox"
+                            onchange="handleFilterChange(event)" />
+                        Komentarz
+                    </label>
+                    <label class="d-flex align-items-center ms-2">
+                        <input id="filter-present" class="form-check-input my-2" type="checkbox"
+                            onchange="handleFilterChange(event)" />
+                        Obecni
+                    </label>
+
+                    <label class="d-flex align-items-center ms-2">
+                        <input id="filter-afterparty" class="form-check-input my-2" type="checkbox"
+                            onchange="handleFilterChange(event)" />
+                        Poprawiny
+                    </label>
+                </div>
             </div>
         </div>
     </div>
