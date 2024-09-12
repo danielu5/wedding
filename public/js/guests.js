@@ -257,6 +257,15 @@ const initGuests = () => {
             if (document.getElementById('filter-present').checked) {
                 allGuests = allGuests.filter(guest => guest.present || guest.SubGuests.some(subGuest => subGuest.present));
             }
+            if (document.getElementById('filter-age1').checked) {
+                allGuests = allGuests.filter(guest => guest.ageGroup == 1 || guest.SubGuests.some(subGuest => subGuest.ageGroup == 1));
+            }
+            if (document.getElementById('filter-age2').checked) {
+                allGuests = allGuests.filter(guest => guest.ageGroup == 2 || guest.SubGuests.some(subGuest => subGuest.ageGroup == 2));
+            }
+            if (document.getElementById('filter-age3').checked) {
+                allGuests = allGuests.filter(guest => guest.ageGroup == 3 || guest.SubGuests.some(subGuest => subGuest.ageGroup == 3));
+            }
             const guests = allGuests.filter(guest => guest.ownerId == null || guest.ownerId == guest.id);
 
             if (guests.length === 0) {
