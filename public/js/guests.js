@@ -221,8 +221,14 @@ const initGuests = () => {
     `;
 
     const noItems = `
-        <li class="list-group-item d-flex align-items-center border-0 mb-2 rounded" style="background-color: #f4f6f7;">
+        <li class="list-group-item d-flex align-items-center border-0 mb-3 rounded" style="background-color: #f4f6f7;">
             <span>Jeszcze nie ma żadnych gości</span>
+        </li>
+    `;
+
+    const loadingItems = `
+        <li class="list-group-item d-flex align-items-center border-0 mb-3 rounded" style="background-color: #f4f6f7;">
+            <span>Trwa ładowanie...</span>
         </li>
     `;
 
@@ -319,6 +325,7 @@ const initGuests = () => {
     };
 
     const handleFilterChange = (ev) => {
+        document.querySelector("#guest-list").innerHTML = loadingItems;
         refreshList();
     };
     window.handleFilterChange = handleFilterChange;
@@ -477,12 +484,14 @@ const initGuests = () => {
     const searchInput = document.getElementById('search-input');
 
     const inputHandler = function (e) {
+        document.querySelector("#guest-list").innerHTML = loadingItems;
         refreshList();
     }
 
     searchInput.addEventListener('input', inputHandler);
     searchInput.addEventListener('propertychange', inputHandler);
 
+    document.querySelector("#guest-list").innerHTML = loadingItems;
     refreshList();
 }
 
