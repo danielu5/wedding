@@ -302,7 +302,9 @@ const initGuests = () => {
             const age1Afterparty = allGuests.filter(guest => guest.ageGroup == 1 && guest.afterparty).length;
             const age2Afterparty = allGuests.filter(guest => guest.ageGroup == 2 && guest.afterparty).length;
             const age3Afterparty = allGuests.filter(guest => guest.ageGroup == 3 && guest.afterparty).length;
-            statsLabel.innerHTML = `Dorośli: ${age3Present}/${age3Afterparty}/<b>${age3Count}</b><br/>Dzieci (5-10): ${age2Present}/${age2Afterparty}/<b>${age2Count}</b><br/>Dzieci (0-5): ${age1Present}/${age1Afterparty}/<b>${age1Count}</b>`;
+            const groupsAll = guests.length;
+            const groupsPresent = guests.filter(guest => guest.present || guest.SubGuests.some(subGuest => subGuest.present)).length;
+            statsLabel.innerHTML = `Pary: ${groupsPresent}/<b>${groupsAll}</b><br/>Dorośli: ${age3Present}/${age3Afterparty}/<b>${age3Count}</b><br/>Dzieci (5-10): ${age2Present}/${age2Afterparty}/<b>${age2Count}</b><br/>Dzieci (0-5): ${age1Present}/${age1Afterparty}/<b>${age1Count}</b>`;
         };
         doRefresh().catch(err => console.log("Error refreshing list", err));
     };
