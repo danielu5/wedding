@@ -220,6 +220,22 @@ const initGuests = () => {
     </div>
     `;
 
+    const renderStats = (guests, allGuests) => {
+        const age1Count = allGuests.filter(guest => guest.ageGroup == 1).length;
+        const age2Count = allGuests.filter(guest => guest.ageGroup == 2).length;
+        const age3Count = allGuests.filter(guest => guest.ageGroup == 3).length;
+        const age1Present = allGuests.filter(guest => guest.ageGroup == 1 && guest.present).length;
+        const age2Present = allGuests.filter(guest => guest.ageGroup == 2 && guest.present).length;
+        const age3Present = allGuests.filter(guest => guest.ageGroup == 3 && guest.present).length;
+        const age1Afterparty = allGuests.filter(guest => guest.ageGroup == 1 && guest.afterparty).length;
+        const age2Afterparty = allGuests.filter(guest => guest.ageGroup == 2 && guest.afterparty).length;
+        const age3Afterparty = allGuests.filter(guest => guest.ageGroup == 3 && guest.afterparty).length;
+        const groupsAll = guests.length;
+        const groupsPresent = guests.filter(guest => guest.present || guest.SubGuests.some(subGuest => subGuest.present)).length;
+
+        return `Pary: ${groupsPresent}/<b>${groupsAll}</b><br/>Dorośli: ${age3Present}/${age3Afterparty}/<b>${age3Count}</b><br/>Dzieci (5-10): ${age2Present}/${age2Afterparty}/<b>${age2Count}</b><br/>Dzieci (0-5): ${age1Present}/${age1Afterparty}/<b>${age1Count}</b>`;
+    };
+
     const noItems = `
         <li class="list-group-item d-flex align-items-center border-0 mb-3 rounded" style="background-color: #f4f6f7;">
             <span>Jeszcze nie ma żadnych gości</span>
@@ -293,18 +309,7 @@ const initGuests = () => {
                     );
             }
 
-            const age1Count = allGuests.filter(guest => guest.ageGroup == 1).length;
-            const age2Count = allGuests.filter(guest => guest.ageGroup == 2).length;
-            const age3Count = allGuests.filter(guest => guest.ageGroup == 3).length;
-            const age1Present = allGuests.filter(guest => guest.ageGroup == 1 && guest.present).length;
-            const age2Present = allGuests.filter(guest => guest.ageGroup == 2 && guest.present).length;
-            const age3Present = allGuests.filter(guest => guest.ageGroup == 3 && guest.present).length;
-            const age1Afterparty = allGuests.filter(guest => guest.ageGroup == 1 && guest.afterparty).length;
-            const age2Afterparty = allGuests.filter(guest => guest.ageGroup == 2 && guest.afterparty).length;
-            const age3Afterparty = allGuests.filter(guest => guest.ageGroup == 3 && guest.afterparty).length;
-            const groupsAll = guests.length;
-            const groupsPresent = guests.filter(guest => guest.present || guest.SubGuests.some(subGuest => subGuest.present)).length;
-            statsLabel.innerHTML = `Pary: ${groupsPresent}/<b>${groupsAll}</b><br/>Dorośli: ${age3Present}/${age3Afterparty}/<b>${age3Count}</b><br/>Dzieci (5-10): ${age2Present}/${age2Afterparty}/<b>${age2Count}</b><br/>Dzieci (0-5): ${age1Present}/${age1Afterparty}/<b>${age1Count}</b>`;
+            statsLabel.innerHTML = renderStats(guests, allGuests);
         };
         doRefresh().catch(err => console.log("Error refreshing list", err));
     };
